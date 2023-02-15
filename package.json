@@ -1,7 +1,7 @@
 {
     "name": "@tb-dev/prototype-dom",
     "version": "1.0.0",
-    "description": "Adds prototype-dom methods to global objects",
+    "description": "Adds prototype methods to dom objects",
     "repository": "ferreira-tb/prototype-dom",
     "author": {
         "name": "Andrew Ferreira",
