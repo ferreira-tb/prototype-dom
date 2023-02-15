@@ -1,6 +1,6 @@
 {
     "name": "@tb-dev/prototype-dom",
-    "version": "1.0.0",
+    "version": "2.0.0",
     "description": "Adds prototype methods to dom objects",
     "repository": "ferreira-tb/prototype-dom",
     "author": {
@@ -38,7 +38,7 @@
         "dist/**/*"
     ],
     "dependencies": {
-        "@tb-dev/ts-guard": "^1.1.0",
+        "@tb-dev/ts-guard": "^1.3.1",
         "@tb-dev/ts-guard-dom": "^1.0.0"
     }
 }

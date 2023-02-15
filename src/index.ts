@@ -1,27 +1,128 @@
-import { assert, assertFinite, assertInteger, assertString } from '@tb-dev/ts-guard';
+import { assertFinite, assertInteger, assertNotNegativeNumber, assertString } from '@tb-dev/ts-guard';
 import { assertElement } from '@tb-dev/ts-guard-dom';
 
 declare global {
     interface Document {
+        /**
+         * Returns the first element that is a descendant of node that matches selectors.
+         * Throws an error if no element is found.
+         * @param selector CSS selector to match.
+         */
         queryAndAssert<T extends Element>(selector: string): T;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns an array instead of a `NodeList`.
+         * @param selector CSS selector to match.
+         */
         queryAsArray<T extends Element>(selector: string): T[];
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `Set` instead of a `NodeList`.
+         * @param selector CSS selector to match.
+         */
         queryAsSet<T extends Element>(selector: string): Set<T>;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `WeakSet` instead of a `NodeList`.
+         * @param selector CSS selector to match.
+         */
         queryAsWeakSet<T extends Element>(selector: string): WeakSet<T>;
-        queryAsMap<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): Map<K, T>;
-        queryAsWeakMap<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): WeakMap<T, K>;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
+         * 
+         * The keys of the map are determined by the `keySelector` function that must be provided.
+         * @param selector CSS selector to match.
+         * @param keySelector Function that returns the key for each element.
+         */
+        queryAsMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T>;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `WeakMap` instead of a `NodeList`.
+         * 
+         * The keys of the map are the elements themselves.
+         * The values of the map are determined by the `keySelector` function that must be provided.
+         * @param selector CSS selector to match.
+         * @param keySelector Function that returns the value for each element.
+         */
+        queryAsWeakMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): WeakMap<T, K>;
     }
 
     interface Element {
-        assertAttribute<T extends string>(attribute: string): T;
-        assertAttributeAsInt(attribute: string, allowNegative?: boolean, radix?: number): number;
-        assertTextContent<T extends string>(): T;
-        parseInt(allowNegative?: boolean, radix?: number): number;
-        parseFloat(allowNegative?: boolean): number;
+        /**
+         * Returns element's first attribute whose qualified name is `qualifiedName`.
+         * However, unlike `getAttribute`, throws an error if the attribute is not found.
+         * @param qualifiedName Attribute to search for.
+         */
+        getAttributeStrict<T extends string>(qualifiedName: string): T;
+        /**
+         * Returns element's first attribute whose qualified name is `qualifiedName`, throwing an error if the attribute is not found.
+         * The tries to parse the attribute as a floating point number. If the parsing fails, an error is thrown.
+         * @param qualifiedName Attribute to search for.
+         * @param allowNegative Determines whether negative numbers are allowed.
+         * This will throw an error if the attribute is a negative number and this parameter is set to `false`.
+         * It defaults to `false`.
+         */
+        getAttributeAsFloatStrict(qualifiedName: string, allowNegative?: boolean): number;
+        /**
+         * Returns element's first attribute whose qualified name is `qualifiedName`, throwing an error if the attribute is not found.
+         * The tries to parse the attribute as an integer. If the parsing fails, an error is thrown.
+         * @param qualifiedName Attribute to search for.
+         * @param radix A value between 2 and 36 that specifies the base of the number in string.
+         * If this argument is not supplied, strings with a prefix of '0x' are considered hexadecimal. All other strings are considered decimal.
+         * @param allowNegative Determines whether negative numbers are allowed.
+         * This will throw an error if the attribute is a negative number and this parameter is set to `false`.
+         * It defaults to `false`.
+         */
+        getAttributeAsIntStrict(qualifiedName: string, radix?: number, allowNegative?: boolean): number;
+        /** Returns the text content of the element, throwing an error if it has no text content. */
+        getTextContentStrict<T extends string>(): T;
+        /** Tries to parse the text content of the element as an integer. If the parsing fails, an error is thrown. */
+        parseIntStrict(radix?: number, allowNegative?: boolean): number;
+        /** Tries to parse the text content of the element as a floating point number. If the parsing fails, an error is thrown. */
+        parseFloatStrict(allowNegative?: boolean): number;
+        /**
+         * Returns the first element that is a descendant of node that matches selectors.
+         * Throws an error if no element is found.
+         * @param selector CSS selector to match.
+         */
         queryAndAssert<T extends Element>(selector: string): T;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns an array instead of a `NodeList`.
+         * @param selector CSS selector to match.
+         */
         queryAsArray<T extends Element>(selector: string): T[];
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `Set` instead of a `NodeList`.
+         * @param selector CSS selector to match.
+         */
         queryAsSet<T extends Element>(selector: string): Set<T>;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `WeakSet` instead of a `NodeList`.
+         * @param selector CSS selector to match.
+         */
         queryAsWeakSet<T extends Element>(selector: string): WeakSet<T>;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
+         * 
+         * The keys of the map are determined by the `keySelector` function that must be provided.
+         * @param selector CSS selector to match.
+         * @param keySelector Function that returns the key for each element.
+         */
         queryAsMap<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): Map<K, T>;
+        /**
+         * Returns all element descendants of node that match selectors.
+         * However, unlike `querySelectorAll`, this method returns a `WeakMap` instead of a `NodeList`.
+         * 
+         * The keys of the map are the elements themselves.
+         * The values of the map are determined by the `keySelector` function that must be provided.
+         * @param selector CSS selector to match.
+         * @param keySelector Function that returns the value for each element.
+         */
         queryAsWeakMap<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): WeakMap<T, K>;
     }
 }
@@ -45,7 +146,7 @@ Document.prototype.queryAsWeakSet = function<T extends Element>(selector: string
     return new WeakSet(this.queryAsArray<T>(selector));
 };
 
-Document.prototype.queryAsMap = function<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): Map<K, T> {
+Document.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
     const elements = this.queryAsArray<T>(selector);
     const map = new Map<K, T>();
     for (const element of elements) {
@@ -55,7 +156,7 @@ Document.prototype.queryAsMap = function<T extends Element, K extends string>(se
     return map;
 };
 
-Document.prototype.queryAsWeakMap = function<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): WeakMap<T, K> {
+Document.prototype.queryAsWeakMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): WeakMap<T, K> {
     const elements = this.queryAsArray<T>(selector);
     const map = new WeakMap<T, K>();
     for (const element of elements) {
@@ -65,54 +166,67 @@ Document.prototype.queryAsWeakMap = function<T extends Element, K extends string
     return map;
 };
 
-Element.prototype.assertAttribute = function<T extends string>(attribute: string): T {
+Element.prototype.getAttributeStrict = function<T extends string>(attribute: string): T {
     const value = this.getAttribute(attribute);
-    assertString(value, `O atributo ${attribute} não existe no elemento.`);
+    assertString(value, `attribute \"${attribute}\" not found`);
     return value.trim() as T;
 };
 
-Element.prototype.assertAttributeAsInt = function(attribute: string, allowNegative = false, radix: number = 10): number {
-    const value = this.assertAttribute(attribute);
-    const parsed = Number.parseInt(value.trim().replace(/\D/g, ''), radix);
-    assertInteger(parsed, 'Não foi possível obter um inteiro a partir do atributo.');
+Element.prototype.getAttributeAsFloatStrict = function(attribute: string, allowNegative = false): number {
+    const value = this.getAttributeStrict(attribute);
+    const parsed = Number.parseFloat(value.trim());
+    assertFinite(parsed, 'could not parse attribute as float');
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assert(sign === 1 || sign === 0, 'O número é negativo.');
+        assertNotNegativeNumber(sign, 'parsed number is negative');
     };
 
     return parsed;
 };
 
-Element.prototype.assertTextContent = function<T extends string>(): T {
+Element.prototype.getAttributeAsIntStrict = function(attribute: string, radix: number = 10, allowNegative = false): number {
+    const value = this.getAttributeStrict(attribute);
+    const parsed = Number.parseInt(value.trim().replace(/\D/g, ''), radix);
+    assertInteger(parsed, 'could not parse attribute as integer');
+
+    if (allowNegative === false) {
+        const sign = Math.sign(parsed);
+        assertNotNegativeNumber(sign, 'parsed number is negative');
+    };
+
+    return parsed;
+};
+
+Element.prototype.getTextContentStrict = function<T extends string>(): T {
     const content = this.textContent;
-    assertString(content, 'O elemento não possui conteúdo em texto.');
+    assertString(content, 'element has no text content');
     return content.trim() as T;
 };
 
-Element.prototype.parseInt = function(allowNegative = false, radix: number = 10): number {
+Element.prototype.parseIntStrict = function(radix: number = 10, allowNegative = false): number {
     const content = this.textContent;
-    assertString(content, 'O elemento não possui conteúdo em texto.');
+    assertString(content, 'element has no text content');
     const parsed = Number.parseInt(content.trim().replace(/\D/g, ''), radix);
-    assertInteger(parsed, 'Não foi possível obter um inteiro a partir do conteúdo em texto do elemento.');
+    assertInteger(parsed, 'could not parse text content as integer');
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assert(sign === 1 || sign === 0, 'O número é negativo.');
+        assertNotNegativeNumber(sign, 'parsed number is negative');
     };
 
     return parsed;
 };
 
-Element.prototype.parseFloat = function(allowNegative = false): number {
+Element.prototype.parseFloatStrict = function(allowNegative = false): number {
     const content = this.textContent;
-    assertString(content, 'O elemento não possui conteúdo em texto.');
+    assertString(content, 'element has no text content');
     const parsed = Number.parseFloat(content.trim());
-    assertFinite(parsed, 'Não foi possível obter um número de ponto flutuante a partir do conteúdo em texto do elemento.');
+    assertFinite(parsed, 'could not parse text content as float');
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assert(sign === 1 || sign === 0, 'O número é negativo.');
+        assertNotNegativeNumber(sign, 'parsed number is negative');
     };
 
     return parsed;
