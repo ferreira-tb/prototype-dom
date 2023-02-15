@@ -1,3 +1,3 @@
 ```
-npm i @tb-dev/prototype
+npm i @tb-dev/prototype-dom
 ```
