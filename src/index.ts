@@ -1,5 +1,11 @@
-import { assertFinite, assertInteger, assertNotNegativeNumber, assertString } from '@tb-dev/ts-guard';
 import { assertElement } from '@tb-dev/ts-guard-dom';
+import {
+    assert,
+    assertFinite,
+    assertInteger,
+    assertString,
+    isString
+} from '@tb-dev/ts-guard';
 
 declare global {
     interface Document {
@@ -101,29 +107,36 @@ declare global {
         queryAsSet<T extends Element>(selector: string): Set<T>;
         /**
          * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns a `WeakSet` instead of a `NodeList`.
-         * @param selector CSS selector to match.
-         */
-        queryAsWeakSet<T extends Element>(selector: string): WeakSet<T>;
-        /**
-         * Returns all element descendants of node that match selectors.
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
          * 
          * The keys of the map are determined by the `keySelector` function that must be provided.
          * @param selector CSS selector to match.
          * @param keySelector Function that returns the key for each element.
          */
-        queryAsMap<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): Map<K, T>;
+        queryAsMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T>;
+    }
+
+    interface MapConstructor {
         /**
-         * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns a `WeakMap` instead of a `NodeList`.
-         * 
-         * The keys of the map are the elements themselves.
-         * The values of the map are determined by the `keySelector` function that must be provided.
-         * @param selector CSS selector to match.
-         * @param keySelector Function that returns the value for each element.
+         * Creates a new map from the provided elements.
+         * @param source Elements to create the map from. If this is a string, it will be treated as a CSS selector.
+         * @param keySelector Function that returns the key for each element.
+         * @param valueSelector Function that returns the value for each element.
          */
-        queryAsWeakMap<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): WeakMap<T, K>;
+        fromElements<T extends Element[] | string, K, V>(
+            source: T,
+            keySelector: (element: Element) => K,
+            valueSelector: (element: Element) => V
+        ): Map<K, V>;
+    }
+
+    interface SetConstructor {
+        /**
+         * Creates a new set from the provided elements.
+         * @param source Elements to create the set from. If this is a string, it will be treated as a CSS selector.
+         * @param valueSelector Function that returns the value for each element.
+         **/
+        fromElements<T extends Element[] | string, K>(source: T, valueSelector: (element: Element) => K): Set<K>;
     }
 }
 
@@ -179,7 +192,7 @@ Element.prototype.getAttributeAsFloatStrict = function(attribute: string, allowN
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assertNotNegativeNumber(sign, 'parsed number is negative');
+        assert(sign === 0 || sign === 1, 'parsed number is negative');
     };
 
     return parsed;
@@ -192,7 +205,7 @@ Element.prototype.getAttributeAsIntStrict = function(attribute: string, radix: n
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assertNotNegativeNumber(sign, 'parsed number is negative');
+        assert(sign === 0 || sign === 1, 'parsed number is negative');
     };
 
     return parsed;
@@ -212,7 +225,7 @@ Element.prototype.parseIntStrict = function(radix: number = 10, allowNegative = 
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assertNotNegativeNumber(sign, 'parsed number is negative');
+        assert(sign === 0 || sign === 1, 'parsed number is negative');
     };
 
     return parsed;
@@ -226,7 +239,7 @@ Element.prototype.parseFloatStrict = function(allowNegative = false): number {
 
     if (allowNegative === false) {
         const sign = Math.sign(parsed);
-        assertNotNegativeNumber(sign, 'parsed number is negative');
+        assert(sign === 0 || sign === 1, 'parsed number is negative');
     };
 
     return parsed;
@@ -247,11 +260,7 @@ Element.prototype.queryAsSet = function<T extends Element>(selector: string): Se
     return new Set(this.queryAsArray<T>(selector));
 };
 
-Element.prototype.queryAsWeakSet = function<T extends Element>(selector: string): WeakSet<T> {
-    return new WeakSet(this.queryAsArray<T>(selector));
-};
-
-Element.prototype.queryAsMap = function<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): Map<K, T> {
+Element.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
     const elements = this.queryAsArray<T>(selector);
     const map = new Map<K, T>();
     for (const element of elements) {
@@ -261,12 +270,41 @@ Element.prototype.queryAsMap = function<T extends Element, K extends string>(sel
     return map;
 };
 
-Element.prototype.queryAsWeakMap = function<T extends Element, K extends string>(selector: string, keySelector: (element: T) => K): WeakMap<T, K> {
-    const elements = this.queryAsArray<T>(selector);
-    const map = new WeakMap<T, K>();
+// Métodos estáticos.
+Map.fromElements = function<T extends Element[] | string, K, V>(
+    source: T,
+    keySelector: (element: Element) => K,
+    valueSelector: (element: Element) => V
+): Map<K, V> {
+    if (!Array.isArray(source) && !isString(source)) {
+        throw new TypeError('source must be an array or a string');
+    };
+
+    const elements: Element[] = Array.isArray(source) ? source : document.queryAsArray(source);
+    const map = new Map<K, V>();
     for (const element of elements) {
+        assertElement(element, `item in source array is not an element`);
         const key = keySelector(element);
-        map.set(element, key);
+        const value = valueSelector(element);
+        map.set(key, value);
     }
     return map;
+};
+
+Set.fromElements = function<T extends Element[] | string, K>(
+    source: T,
+    valueSelector: (element: Element) => K
+): Set<K> {
+    if (!Array.isArray(source) && !isString(source)) {
+        throw new TypeError('source must be an array or a string');
+    };
+
+    const elements: Element[] = Array.isArray(source) ? source : document.queryAsArray(source);
+    const set = new Set<K>();
+    for (const element of elements) {
+        assertElement(element, `item in source array is not an element`);
+        const value = valueSelector(element);
+        set.add(value);
+    }
+    return set;
 };
