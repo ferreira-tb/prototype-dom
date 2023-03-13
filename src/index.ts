@@ -29,12 +29,6 @@ declare global {
         queryAsSet<T extends Element>(selector: string): Set<T>;
         /**
          * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns a `WeakSet` instead of a `NodeList`.
-         * @param selector CSS selector to match.
-         */
-        queryAsWeakSet<T extends Element>(selector: string): WeakSet<T>;
-        /**
-         * Returns all element descendants of node that match selectors.
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
          * 
          * The keys of the map are determined by the `keySelector` function that must be provided.
@@ -42,16 +36,6 @@ declare global {
          * @param keySelector Function that returns the key for each element.
          */
         queryAsMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T>;
-        /**
-         * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns a `WeakMap` instead of a `NodeList`.
-         * 
-         * The keys of the map are the elements themselves.
-         * The values of the map are determined by the `keySelector` function that must be provided.
-         * @param selector CSS selector to match.
-         * @param keySelector Function that returns the value for each element.
-         */
-        queryAsWeakMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): WeakMap<T, K>;
     }
 
     interface Element {
@@ -155,26 +139,12 @@ Document.prototype.queryAsSet = function<T extends Element>(selector: string): S
     return new Set(this.queryAsArray<T>(selector));
 };
 
-Document.prototype.queryAsWeakSet = function<T extends Element>(selector: string): WeakSet<T> {
-    return new WeakSet(this.queryAsArray<T>(selector));
-};
-
 Document.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
     const elements = this.queryAsArray<T>(selector);
     const map = new Map<K, T>();
     for (const element of elements) {
         const key = keySelector(element);
         map.set(key, element);
-    }
-    return map;
-};
-
-Document.prototype.queryAsWeakMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): WeakMap<T, K> {
-    const elements = this.queryAsArray<T>(selector);
-    const map = new WeakMap<T, K>();
-    for (const element of elements) {
-        const key = keySelector(element);
-        map.set(element, key);
     }
     return map;
 };
