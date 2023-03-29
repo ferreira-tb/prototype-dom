@@ -16,17 +16,19 @@ declare global {
          */
         queryAndAssert<T extends Element>(selector: string): T;
         /**
-         * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns an array instead of a `NodeList`.
+         * Query all element descendants of node that match selectors, then create an array from the result.
+         * The values of the array can be customized by providing a `valueSelector` function.
+         * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsArray<T extends Element>(selector: string): T[];
+        queryAsArray<T>(selector: string, valueSelector?: (element: Element) => T): T[];
         /**
-         * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns a `Set` instead of a `NodeList`.
+         * Query all element descendants of node that match selectors, then create a `Set` from the result.
+         * The values of the set can be customized by providing a `valueSelector` function.
+         * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsSet<T extends Element>(selector: string): Set<T>;
+        queryAsSet<T>(selector: string, valueSelector?: (element: Element) => T): Set<T>;
         /**
          * Returns all element descendants of node that match selectors.
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
@@ -78,17 +80,19 @@ declare global {
          */
         queryAndAssert<T extends Element>(selector: string): T;
         /**
-         * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns an array instead of a `NodeList`.
+         * Query all element descendants of node that match selectors, then create an array from the result.
+         * The values of the array can be customized by providing a `valueSelector` function.
+         * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsArray<T extends Element>(selector: string): T[];
+        queryAsArray<T>(selector: string, valueSelector?: (element: Element) => T): T[];
         /**
-         * Returns all element descendants of node that match selectors.
-         * However, unlike `querySelectorAll`, this method returns a `Set` instead of a `NodeList`.
+         * Query all element descendants of node that match selectors, then create a `Set` from the result.
+         * The values of the set can be customized by providing a `valueSelector` function.
+         * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsSet<T extends Element>(selector: string): Set<T>;
+        queryAsSet<T>(selector: string, valueSelector?: (element: Element) => T): Set<T>;
         /**
          * Returns all element descendants of node that match selectors.
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
@@ -130,13 +134,16 @@ Document.prototype.queryAndAssert = function<T extends Element>(selector: string
     return element;
 };
 
-Document.prototype.queryAsArray = function<T extends Element>(selector: string): T[] {
-    const elements = this.querySelectorAll<T>(selector);
-    return Array.from(elements);
+Document.prototype.queryAsArray = function<T>(selector: string, valueSelector?: (element: Element) => T): T[] {
+    if (!valueSelector) valueSelector = (element: Element) => element as T;
+    const elements = this.querySelectorAll(selector);
+    return Array.from(elements, valueSelector);
 };
 
-Document.prototype.queryAsSet = function<T extends Element>(selector: string): Set<T> {
-    return new Set(this.queryAsArray<T>(selector));
+Document.prototype.queryAsSet = function<T>(selector: string, valueSelector?: (element: Element) => T): Set<T> {
+    if (!valueSelector) valueSelector = (element: Element) => element as T;
+    const elements = this.queryAsArray<T>(selector, valueSelector);
+    return new Set(elements);
 };
 
 Document.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
@@ -221,13 +228,16 @@ Element.prototype.queryAndAssert = function<T extends Element>(selector: string)
     return element;
 };
 
-Element.prototype.queryAsArray = function<T extends Element>(selector: string): T[] {
-    const elements = this.querySelectorAll<T>(selector);
-    return Array.from(elements);
+Element.prototype.queryAsArray = function<T>(selector: string, valueSelector?: (element: Element) => T): T[] {
+    if (!valueSelector) valueSelector = (element: Element) => element as T;
+    const elements = this.querySelectorAll(selector);
+    return Array.from(elements, valueSelector);
 };
 
-Element.prototype.queryAsSet = function<T extends Element>(selector: string): Set<T> {
-    return new Set(this.queryAsArray<T>(selector));
+Element.prototype.queryAsSet = function<T>(selector: string, valueSelector?: (element: Element) => T): Set<T> {
+    if (!valueSelector) valueSelector = (element: Element) => element as T;
+    const elements = this.queryAsArray<T>(selector, valueSelector);
+    return new Set(elements);
 };
 
 Element.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
