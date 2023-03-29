@@ -21,14 +21,14 @@ declare global {
          * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsArray<T>(selector: string, valueSelector?: (element: Element) => T): T[];
+        queryAsArray<T = Element>(selector: string, valueSelector?: (element: Element) => T): T[];
         /**
          * Query all element descendants of node that match selectors, then create a `Set` from the result.
          * The values of the set can be customized by providing a `valueSelector` function.
          * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsSet<T>(selector: string, valueSelector?: (element: Element) => T): Set<T>;
+        queryAsSet<T = Element>(selector: string, valueSelector?: (element: Element) => T): Set<T>;
         /**
          * Returns all element descendants of node that match selectors.
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
@@ -85,14 +85,14 @@ declare global {
          * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsArray<T>(selector: string, valueSelector?: (element: Element) => T): T[];
+        queryAsArray<T = Element>(selector: string, valueSelector?: (element: Element) => T): T[];
         /**
          * Query all element descendants of node that match selectors, then create a `Set` from the result.
          * The values of the set can be customized by providing a `valueSelector` function.
          * Defaults to the element itself.
          * @param selector CSS selector to match.
          */
-        queryAsSet<T>(selector: string, valueSelector?: (element: Element) => T): Set<T>;
+        queryAsSet<T = Element>(selector: string, valueSelector?: (element: Element) => T): Set<T>;
         /**
          * Returns all element descendants of node that match selectors.
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
@@ -134,13 +134,13 @@ Document.prototype.queryAndAssert = function<T extends Element>(selector: string
     return element;
 };
 
-Document.prototype.queryAsArray = function<T>(selector: string, valueSelector?: (element: Element) => T): T[] {
+Document.prototype.queryAsArray = function<T = Element>(selector: string, valueSelector?: (element: Element) => T): T[] {
     if (!valueSelector) valueSelector = (element: Element) => element as T;
     const elements = this.querySelectorAll(selector);
     return Array.from(elements, valueSelector);
 };
 
-Document.prototype.queryAsSet = function<T>(selector: string, valueSelector?: (element: Element) => T): Set<T> {
+Document.prototype.queryAsSet = function<T = Element>(selector: string, valueSelector?: (element: Element) => T): Set<T> {
     if (!valueSelector) valueSelector = (element: Element) => element as T;
     const elements = this.queryAsArray<T>(selector, valueSelector);
     return new Set(elements);
@@ -228,13 +228,13 @@ Element.prototype.queryAndAssert = function<T extends Element>(selector: string)
     return element;
 };
 
-Element.prototype.queryAsArray = function<T>(selector: string, valueSelector?: (element: Element) => T): T[] {
+Element.prototype.queryAsArray = function<T = Element>(selector: string, valueSelector?: (element: Element) => T): T[] {
     if (!valueSelector) valueSelector = (element: Element) => element as T;
     const elements = this.querySelectorAll(selector);
     return Array.from(elements, valueSelector);
 };
 
-Element.prototype.queryAsSet = function<T>(selector: string, valueSelector?: (element: Element) => T): Set<T> {
+Element.prototype.queryAsSet = function<T = Element>(selector: string, valueSelector?: (element: Element) => T): Set<T> {
     if (!valueSelector) valueSelector = (element: Element) => element as T;
     const elements = this.queryAsArray<T>(selector, valueSelector);
     return new Set(elements);
