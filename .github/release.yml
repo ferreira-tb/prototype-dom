@@ -1,0 +1,25 @@
+changelog: 
+  categories:
+    - title: Breaking Changes
+      labels:
+        - BREAKING CHANGE
+        
+    - title: Novidades
+      labels:
+        - enhancement
+        
+    - title: Correções de bugs
+      labels:
+        - bug
+        
+    - title: Outras mudanças
+      labels:
+        - "*"
+      exclude:
+        labels:
+          - dependencies
+          - github actions
+
+    - title: Dependências
+      labels:
+        - dependencies

@@ -1,12 +1,3 @@
-import { assertElement } from '@tb-dev/ts-guard-dom';
-import {
-    assert,
-    assertFinite,
-    assertInteger,
-    assertString,
-    isString
-} from '@tb-dev/ts-guard';
-
 declare global {
     interface Document {
         /**
@@ -130,7 +121,7 @@ declare global {
 
 Document.prototype.queryAndAssert = function<T extends Element>(selector: string): T {
     const element = this.querySelector<T>(selector);
-    assertElement(element, selector);
+    if (!element) throw new Error(`No element found for selector "${selector}"`);
     return element;
 };
 
@@ -157,74 +148,52 @@ Document.prototype.queryAsMap = function<T extends Element, K>(selector: string,
 };
 
 Element.prototype.getAttributeStrict = function<T extends string>(attribute: string): T {
-    const value = this.getAttribute(attribute);
-    assertString(value, `attribute \"${attribute}\" not found`);
-    return value.trim() as T;
+    const value = this.getAttribute(attribute)?.trim();
+    if (typeof value !== 'string' || value.length === 0) throw new Error(`attribute "${attribute}" not found`);
+    return value as T;
 };
 
-Element.prototype.getAttributeAsFloatStrict = function(attribute: string, allowNegative = false): number {
+Element.prototype.getAttributeAsFloatStrict = function(attribute: string): number {
     const value = this.getAttributeStrict(attribute);
-    const parsed = Number.parseFloat(value.trim());
-    assertFinite(parsed, 'could not parse attribute as float');
-
-    if (allowNegative === false) {
-        const sign = Math.sign(parsed);
-        assert(sign === 0 || sign === 1, 'parsed number is negative');
-    };
-
+    const parsed = Number.parseFloat(value);
+    if (!Number.isFinite(parsed)) throw new Error(`could not parse attribute "${attribute}" as float`);
     return parsed;
 };
 
-Element.prototype.getAttributeAsIntStrict = function(attribute: string, radix: number = 10, allowNegative = false): number {
+Element.prototype.getAttributeAsIntStrict = function(attribute: string, radix: number = 10): number {
     const value = this.getAttributeStrict(attribute);
-    const parsed = Number.parseInt(value.trim().replace(/\D/g, ''), radix);
-    assertInteger(parsed, 'could not parse attribute as integer');
-
-    if (allowNegative === false) {
-        const sign = Math.sign(parsed);
-        assert(sign === 0 || sign === 1, 'parsed number is negative');
-    };
-
+    const parsed = Number.parseInt(value.replace(/\D/g, ''), radix);
+    if (!Number.isInteger(parsed)) throw new Error(`could not parse attribute "${attribute}" as integer`);
     return parsed;
 };
 
 Element.prototype.getTextContentStrict = function<T extends string>(): T {
-    const content = this.textContent;
-    assertString(content, 'element has no text content');
-    return content.trim() as T;
+    const content = this.textContent?.trim();
+    if (typeof content !== 'string' || content.length === 0) throw new Error('element has no text content');
+    return content as T;
 };
 
-Element.prototype.parseIntStrict = function(radix: number = 10, allowNegative = false): number {
-    const content = this.textContent;
-    assertString(content, 'element has no text content');
-    const parsed = Number.parseInt(content.trim().replace(/\D/g, ''), radix);
-    assertInteger(parsed, 'could not parse text content as integer');
+Element.prototype.parseIntStrict = function(radix: number = 10): number {
+    const content = this.textContent?.trim();
+    if (typeof content !== 'string' || content.length === 0) throw new Error('element has no text content');
 
-    if (allowNegative === false) {
-        const sign = Math.sign(parsed);
-        assert(sign === 0 || sign === 1, 'parsed number is negative');
-    };
-
+    const parsed = Number.parseInt(content.replace(/\D/g, ''), radix);
+    if (!Number.isInteger(parsed)) throw new Error('could not parse text content as integer');
     return parsed;
 };
 
-Element.prototype.parseFloatStrict = function(allowNegative = false): number {
-    const content = this.textContent;
-    assertString(content, 'element has no text content');
-    const parsed = Number.parseFloat(content.trim());
-    assertFinite(parsed, 'could not parse text content as float');
+Element.prototype.parseFloatStrict = function(): number {
+    const content = this.textContent?.trim();
+    if (typeof content !== 'string' || content.length === 0) throw new Error('element has no text content');
 
-    if (allowNegative === false) {
-        const sign = Math.sign(parsed);
-        assert(sign === 0 || sign === 1, 'parsed number is negative');
-    };
-
+    const parsed = Number.parseFloat(content);
+    if (!Number.isFinite(parsed)) throw new Error('could not parse text content as float');
     return parsed;
 };
 
 Element.prototype.queryAndAssert = function<T extends Element>(selector: string): T {
     const element = this.querySelector<T>(selector);
-    assertElement(element, selector);
+    if (!element) throw new Error(`No element found for selector "${selector}"`);
     return element;
 };
 
@@ -256,14 +225,14 @@ Map.fromElements = function<T extends Element[] | string, K, V>(
     keySelector: (element: Element) => K,
     valueSelector: (element: Element) => V
 ): Map<K, V> {
-    if (!Array.isArray(source) && !isString(source)) {
-        throw new TypeError('source must be an array or a string');
+    if (!Array.isArray(source) && (typeof source !== 'string' || source.length === 0)) {
+        throw new Error('source must be an array or a string');
     };
 
     const elements: Element[] = Array.isArray(source) ? source : document.queryAsArray(source);
     const map = new Map<K, V>();
     for (const element of elements) {
-        assertElement(element, `item in source array is not an element`);
+        if (!(element instanceof Element)) throw new Error('item in source array is not an element');
         const key = keySelector(element);
         const value = valueSelector(element);
         map.set(key, value);
@@ -275,14 +244,14 @@ Set.fromElements = function<T extends Element[] | string, K>(
     source: T,
     valueSelector: (element: Element) => K
 ): Set<K> {
-    if (!Array.isArray(source) && !isString(source)) {
-        throw new TypeError('source must be an array or a string');
+    if (!Array.isArray(source) && (typeof source !== 'string' || source.length === 0)) {
+        throw new Error('source must be an array or a string');
     };
 
     const elements: Element[] = Array.isArray(source) ? source : document.queryAsArray(source);
     const set = new Set<K>();
     for (const element of elements) {
-        assertElement(element, `item in source array is not an element`);
+        if (!(element instanceof Element)) throw new Error('item in source array is not an element');
         const value = valueSelector(element);
         set.add(value);
     }
