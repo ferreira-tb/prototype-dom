@@ -1,6 +1,6 @@
 {
     "name": "@tb-dev/prototype-dom",
-    "version": "4.0.0",
+    "version": "4.0.1",
     "description": "Adds prototype methods to dom objects",
     "repository": "ferreira-tb/prototype-dom",
     "author": {
