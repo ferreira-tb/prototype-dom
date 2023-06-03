@@ -1,4 +1,13 @@
 declare global {
+    interface ArrayConstructor {
+        /**
+         * Creates a new array from the provided elements.
+         * @param source Elements to create the array from. If this is a string, it will be treated as a CSS selector.
+         * @param valueSelector Function that returns the value for each element.
+         **/
+        fromElements<T extends Element[] | NodeList | string, V>(source: T, valueSelector: (element: Element) => V): V[];
+    }
+
     interface Document {
         /**
          * Returns the first element that is a descendant of node that matches selectors.
@@ -102,7 +111,7 @@ declare global {
          * @param keySelector Function that returns the key for each element.
          * @param valueSelector Function that returns the value for each element.
          */
-        fromElements<T extends Element[] | string, K, V>(
+        fromElements<T extends Element[] | NodeList | string, K, V>(
             source: T,
             keySelector: (element: Element) => K,
             valueSelector: (element: Element) => V
@@ -115,7 +124,7 @@ declare global {
          * @param source Elements to create the set from. If this is a string, it will be treated as a CSS selector.
          * @param valueSelector Function that returns the value for each element.
          **/
-        fromElements<T extends Element[] | string, K>(source: T, valueSelector: (element: Element) => K): Set<K>;
+        fromElements<T extends Element[] | NodeList | string, K>(source: T, valueSelector: (element: Element) => K): Set<K>;
     }
 }
 
@@ -220,16 +229,22 @@ Element.prototype.queryAsMap = function<T extends Element, K>(selector: string, 
 };
 
 // Métodos estáticos.
-Map.fromElements = function<T extends Element[] | string, K, V>(
+Array.fromElements = function<T extends Element[] | NodeList | string, V>(
+    source: T,
+    valueSelector: (element: Element) => V
+): V[] {
+    isValidElementSource(source);
+    const elements = parseElementSource(source);
+    return Array.from(elements, valueSelector);
+};
+
+Map.fromElements = function<T extends Element[] | NodeList | string, K, V>(
     source: T,
     keySelector: (element: Element) => K,
     valueSelector: (element: Element) => V
 ): Map<K, V> {
-    if (!Array.isArray(source) && (typeof source !== 'string' || source.length === 0)) {
-        throw new Error('source must be an array or a string');
-    };
-
-    const elements: Element[] = Array.isArray(source) ? source : document.queryAsArray(source);
+    isValidElementSource(source);
+    const elements = parseElementSource(source);
     const map = new Map<K, V>();
     for (const element of elements) {
         if (!(element instanceof Element)) throw new Error('item in source array is not an element');
@@ -240,15 +255,12 @@ Map.fromElements = function<T extends Element[] | string, K, V>(
     return map;
 };
 
-Set.fromElements = function<T extends Element[] | string, K>(
+Set.fromElements = function<T extends Element[] | NodeList | string, K>(
     source: T,
     valueSelector: (element: Element) => K
 ): Set<K> {
-    if (!Array.isArray(source) && (typeof source !== 'string' || source.length === 0)) {
-        throw new Error('source must be an array or a string');
-    };
-
-    const elements: Element[] = Array.isArray(source) ? source : document.queryAsArray(source);
+    isValidElementSource(source);
+    const elements = parseElementSource(source);
     const set = new Set<K>();
     for (const element of elements) {
         if (!(element instanceof Element)) throw new Error('item in source array is not an element');
@@ -256,4 +268,29 @@ Set.fromElements = function<T extends Element[] | string, K>(
         set.add(value);
     }
     return set;
+};
+
+// Auxiliares.
+function isValidElementSource<T>(source: unknown): source is T[] | NodeList | string {
+    if (
+        !Array.isArray(source) &&
+        !(source instanceof NodeList) &&
+        (typeof source !== 'string' || source.length === 0)
+    ) {
+        throw new TypeError('source must be an array, a NodeList or a string');
+    };
+
+    return true;
+};
+
+function parseElementSource<T extends Element[] | NodeList | string>(source: T): Element[] {
+    if (typeof source === 'string') {
+        return document.queryAsArray(source);
+    } else if (Array.isArray(source)) {
+        return source;
+    } else if (source instanceof NodeList) {
+        return Array.from(source) as Element[];
+    } else {
+        throw new TypeError('source must be an array, a NodeList or a string');
+    };
 };
