@@ -14,7 +14,7 @@ declare global {
          * Throws an error if no element is found.
          * @param selector CSS selector to match.
          */
-        queryAndAssert<T extends Element>(selector: string): T;
+        queryStrict<T extends Element>(selector: string): T;
         /**
          * Query all element descendants of node that match selectors, then create an array from the result.
          * The values of the array can be customized by providing a `valueSelector` function.
@@ -34,10 +34,16 @@ declare global {
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
          * 
          * The keys of the map are determined by the `keySelector` function that must be provided.
+         * The values can also be customized by providing a `valueSelector` function, but defaults to the element itself.
          * @param selector CSS selector to match.
          * @param keySelector Function that returns the key for each element.
+         * @param valueSelector Function that returns the value for each element.
          */
-        queryAsMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T>;
+        queryAsMap<T extends Element, K, V>(
+            selector: string,
+            keySelector: (element: T) => K,
+            valueSelector?: (element: T) => V
+        ): Map<K, V>;
     }
 
     interface Element {
@@ -78,7 +84,7 @@ declare global {
          * Throws an error if no element is found.
          * @param selector CSS selector to match.
          */
-        queryAndAssert<T extends Element>(selector: string): T;
+        queryStrict<T extends Element>(selector: string): T;
         /**
          * Query all element descendants of node that match selectors, then create an array from the result.
          * The values of the array can be customized by providing a `valueSelector` function.
@@ -98,10 +104,16 @@ declare global {
          * However, unlike `querySelectorAll`, this method returns a `Map` instead of a `NodeList`.
          * 
          * The keys of the map are determined by the `keySelector` function that must be provided.
+         * The values can also be customized by providing a `valueSelector` function, but defaults to the element itself.
          * @param selector CSS selector to match.
          * @param keySelector Function that returns the key for each element.
+         * @param valueSelector Function that returns the value for each element.
          */
-        queryAsMap<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T>;
+        queryAsMap<T extends Element, K, V>(
+            selector: string,
+            keySelector: (element: T) => K,
+            valueSelector?: (element: T) => V
+        ): Map<K, V>;
     }
 
     interface MapConstructor {
@@ -128,7 +140,7 @@ declare global {
     }
 }
 
-Document.prototype.queryAndAssert = function<T extends Element>(selector: string): T {
+Document.prototype.queryStrict = function<T extends Element>(selector: string): T {
     const element = this.querySelector<T>(selector);
     if (!element) throw new Error(`No element found for selector "${selector}"`);
     return element;
@@ -146,13 +158,19 @@ Document.prototype.queryAsSet = function<T = Element>(selector: string, valueSel
     return new Set(elements);
 };
 
-Document.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
+Document.prototype.queryAsMap = function<T extends Element, K, V = T>(
+    selector: string,
+    keySelector: (element: T) => K,
+    valueSelector: (element: T) => V = (el: T) => (el as unknown) as V
+): Map<K, V> {
     const elements = this.queryAsArray<T>(selector);
-    const map = new Map<K, T>();
+    const map = new Map<K, V>();
     for (const element of elements) {
         const key = keySelector(element);
-        map.set(key, element);
-    }
+        const value = valueSelector(element);
+        map.set(key, value);
+    };
+
     return map;
 };
 
@@ -200,7 +218,7 @@ Element.prototype.parseFloatStrict = function(): number {
     return parsed;
 };
 
-Element.prototype.queryAndAssert = function<T extends Element>(selector: string): T {
+Element.prototype.queryStrict = function<T extends Element>(selector: string): T {
     const element = this.querySelector<T>(selector);
     if (!element) throw new Error(`No element found for selector "${selector}"`);
     return element;
@@ -218,13 +236,19 @@ Element.prototype.queryAsSet = function<T = Element>(selector: string, valueSele
     return new Set(elements);
 };
 
-Element.prototype.queryAsMap = function<T extends Element, K>(selector: string, keySelector: (element: T) => K): Map<K, T> {
+Element.prototype.queryAsMap =  function<T extends Element, K, V = T>(
+    selector: string,
+    keySelector: (element: T) => K,
+    valueSelector: (element: T) => V = (el: T) => (el as unknown) as V
+): Map<K, V> {
     const elements = this.queryAsArray<T>(selector);
-    const map = new Map<K, T>();
+    const map = new Map<K, V>();
     for (const element of elements) {
         const key = keySelector(element);
-        map.set(key, element);
-    }
+        const value = valueSelector(element);
+        map.set(key, value);
+    };
+
     return map;
 };
 
