@@ -39,7 +39,7 @@ declare global {
          * @param keySelector Function that returns the key for each element.
          * @param valueSelector Function that returns the value for each element.
          */
-        queryAsMap<T extends Element, K, V>(
+        queryAsMap<T extends Element, K, V = T>(
             selector: string,
             keySelector: (element: T) => K,
             valueSelector?: (element: T) => V
@@ -109,7 +109,7 @@ declare global {
          * @param keySelector Function that returns the key for each element.
          * @param valueSelector Function that returns the value for each element.
          */
-        queryAsMap<T extends Element, K, V>(
+        queryAsMap<T extends Element, K, V = T>(
             selector: string,
             keySelector: (element: T) => K,
             valueSelector?: (element: T) => V
