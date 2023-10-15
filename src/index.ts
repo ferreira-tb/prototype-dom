@@ -318,3 +318,5 @@ function parseElementSource<T extends Element[] | NodeList | string>(source: T):
         throw new TypeError('source must be an array, a NodeList or a string');
     };
 };
+
+export {};
