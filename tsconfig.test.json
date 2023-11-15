@@ -1,5 +1,5 @@
 {
-    "include": ["src/**/*"],
+    "include": ["test/**/*"],
     "compilerOptions": {
         "baseUrl": ".",
         "target": "esnext",
@@ -11,8 +11,7 @@
         "removeComments": false,
         "verbatimModuleSyntax": true,
         "skipLibCheck": true,
-        "declaration": true,
-        "declarationDir": "dist",
+        "declaration": false,
 
         "alwaysStrict": true,
         "noImplicitAny": true,
