@@ -1,64 +1,68 @@
 {
-    "name": "@tb-dev/prototype-dom",
-    "version": "5.1.0",
-    "description": "Adds prototype methods to DOM objects",
-    "license": "MIT",
-    "author": {
-        "name": "Andrew Ferreira",
-        "email": "andrew.shien2@gmail.com",
-        "url": "https://github.com/ferreira-tb"
-    },
-    "homepage": "https://tb.dev.br/prototype-dom",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/ferreira-tb/prototype-dom.git"
-    },
-    "bugs": {
-        "url": "https://github.com/ferreira-tb/prototype-dom/issues",
-        "email": "andrew.shien2@gmail.com"
-    },
-    "main": "dist/index.js",
-    "type": "module",
-    "files": [
-        "dist/**/*"
-    ],
-    "types": "dist/index.d.ts",
-    "lint-staged": {
-        "*.{?(c|m)@(j|t)s,css,vue,md,json}": "prettier --write"
-    },
-    "scripts": {
-        "build": "run-s rollup script:minify",
-        "deploy": "npm run docs:typedoc",
-        "docs:typedoc": "npx typedoc --plugin typedoc-plugin-mdn-links",
-        "prepare": "husky install",
-        "prettier": "npx prettier . --write",
-        "rollup": "rollup --config rollup.config.ts --configPlugin typescript={tsconfig:'tsconfig.rollup.json'}",
-        "script:minify": "node scripts/minify.mjs",
-        "script:publish": "node scripts/publish.mjs",
-        "taze": "npx taze -w -f",
-        "test": "vitest",
-        "test:coverage": "vitest --coverage",
-        "test:ui": "vitest --ui --watch --coverage.enabled=true",
-        "test:watch": "vitest --watch"
-    },
-    "devDependencies": {
-        "@octokit/core": "^5.0.1",
-        "@rollup/plugin-typescript": "^11.1.5",
-        "@vitest/browser": "^1.0.0-beta.4",
-        "@vitest/coverage-istanbul": "^1.0.0-beta.4",
-        "@vitest/ui": "^1.0.0-beta.4",
-        "husky": "^8.0.3",
-        "lint-staged": "^15.1.0",
-        "npm-run-all": "^4.1.5",
-        "prettier": "^3.1.0",
-        "rollup": "^4.4.1",
-        "taze": "^0.12.0",
-        "terser": "^5.24.0",
-        "tslib": "^2.6.2",
-        "typedoc": "^0.25.3",
-        "typedoc-plugin-mdn-links": "^3.1.0",
-        "typescript": "^5.2.2",
-        "vitest": "^1.0.0-beta.4",
-        "webdriverio": "^8.23.0"
-    }
+  "name": "@tb-dev/prototype-dom",
+  "version": "5.1.1",
+  "description": "Adds prototype methods to DOM objects",
+  "packageManager": "pnpm@8.10.5",
+  "license": "MIT",
+  "author": {
+    "name": "Andrew Ferreira",
+    "email": "andrew.shien2@gmail.com",
+    "url": "https://github.com/ferreira-tb"
+  },
+  "homepage": "https://tb.dev.br/prototype-dom",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/ferreira-tb/prototype-dom.git"
+  },
+  "bugs": {
+    "url": "https://github.com/ferreira-tb/prototype-dom/issues",
+    "email": "andrew.shien2@gmail.com"
+  },
+  "main": "dist/index.js",
+  "type": "module",
+  "files": [
+    "dist/**/*"
+  ],
+  "types": "dist/index.d.ts",
+  "lint-staged": {
+    "*.{?(c|m)@(j|t)s,css,vue,md,json}": "prettier --write"
+  },
+  "scripts": {
+    "build": "run-s rollup minify",
+    "deploy": "npm run docs:typedoc",
+    "docs:typedoc": "npx typedoc --plugin typedoc-plugin-mdn-links",
+    "minify": "npx minify-it dist",
+    "prepare": "husky install",
+    "prettier": "npx prettier . --write",
+    "rollup": "rollup --config rollup.config.ts --configPlugin typescript={tsconfig:'tsconfig.rollup.json'}",
+    "script:publish": "node --loader ts-node/esm scripts/publish.ts",
+    "taze": "npx taze -w -f",
+    "test": "vitest",
+    "test:coverage": "vitest --coverage",
+    "test:ui": "vitest --ui --watch --coverage.enabled=true",
+    "test:watch": "vitest --watch"
+  },
+  "devDependencies": {
+    "@octokit/core": "^5.0.1",
+    "@rollup/plugin-typescript": "^11.1.5",
+    "@types/node": "^20.9.2",
+    "@vitest/browser": "^1.0.0-beta.5",
+    "@vitest/coverage-istanbul": "^1.0.0-beta.5",
+    "@vitest/ui": "^1.0.0-beta.5",
+    "husky": "^8.0.3",
+    "lint-staged": "^15.1.0",
+    "minify-it": "^1.0.1",
+    "npm-run-all": "^4.1.5",
+    "prettier": "^3.1.0",
+    "rollup": "^4.5.0",
+    "taze": "^0.12.0",
+    "terser": "^5.24.0",
+    "ts-node": "^10.9.1",
+    "tslib": "^2.6.2",
+    "typedoc": "^0.25.3",
+    "typedoc-plugin-mdn-links": "^3.1.4",
+    "typescript": "5.2.2",
+    "vitest": "^1.0.0-beta.5",
+    "webdriverio": "^8.23.2"
+  }
 }
