@@ -51,7 +51,7 @@
     "@vitest/ui": "^1.0.0-beta.5",
     "husky": "^8.0.3",
     "lint-staged": "^15.1.0",
-    "minify-it": "^1.0.1",
+    "minify-it": "^1.1.2",
     "npm-run-all": "^4.1.5",
     "prettier": "^3.1.0",
     "rollup": "^4.5.0",

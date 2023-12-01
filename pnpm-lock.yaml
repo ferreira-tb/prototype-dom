@@ -30,8 +30,8 @@ devDependencies:
     specifier: ^15.1.0
     version: 15.1.0
   minify-it:
-    specifier: ^1.0.1
-    version: 1.0.1
+    specifier: ^1.1.2
+    version: 1.1.2
   npm-run-all:
     specifier: ^4.1.5
     version: 4.1.5
@@ -3093,8 +3093,8 @@ packages:
     engines: {node: ^12.20.0 || ^14.13.1 || >=16.0.0}
     dev: true
 
-  /minify-it@1.0.1:
-    resolution: {integrity: sha512-Q0hEqzR6L0FgMELCEt/cD+O6EnYHvUFS28DvnyQYon0sGxR1e2ZWnc9N5uLkZQyIArLP82QRZqitBRK+IMcHhw==}
+  /minify-it@1.1.2:
+    resolution: {integrity: sha512-/929X3VHroOYrI5jk4W7SHD53PcgMX1w83ZJJ+yvIlJjk4SLSCJNWF8mJRnOpybOlgjyZf1y7xuICNW2uLrT6g==}
     hasBin: true
     dependencies:
       terser: 5.24.0
