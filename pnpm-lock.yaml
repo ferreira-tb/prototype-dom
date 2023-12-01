@@ -18,8 +18,8 @@ devDependencies:
     specifier: ^1.0.0-beta.5
     version: 1.0.0-beta.5(vitest@1.0.0-beta.5)(webdriverio@8.23.2)
   '@vitest/coverage-istanbul':
-    specifier: ^1.0.0-beta.5
-    version: 1.0.0-beta.5(vitest@1.0.0-beta.5)
+    specifier: ^1.0.0-beta.6
+    version: 1.0.0-beta.6(vitest@1.0.0-beta.5)
   '@vitest/ui':
     specifier: ^1.0.0-beta.5
     version: 1.0.0-beta.5(vitest@1.0.0-beta.5)
@@ -1054,8 +1054,8 @@ packages:
       webdriverio: 8.23.2(typescript@5.2.2)
     dev: true
 
-  /@vitest/coverage-istanbul@1.0.0-beta.5(vitest@1.0.0-beta.5):
-    resolution: {integrity: sha512-uMRp9QgkQSgrJlTf/EVlFWZV4mC06gfjisFubcqNKRvAua7abZERr5Z3Xc1pfP6HENAQheJYyrrtUVbz9kzybw==}
+  /@vitest/coverage-istanbul@1.0.0-beta.6(vitest@1.0.0-beta.5):
+    resolution: {integrity: sha512-fGxwZv/k+wfiFXNChpaXeMrB+BqUPPRnjUTlOvOlwJgYtFzK1UrAyokDYRHCNWU1UkzdCBzAll+lHd/6H9aytA==}
     peerDependencies:
       vitest: ^1.0.0-0
     dependencies:
