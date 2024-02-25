@@ -50,6 +50,13 @@ declare global {
       keySelector: (element: T) => K,
       valueSelector?: (element: T) => V
     ) => Map<K, V>;
+
+    /**
+     * Waits for the first descendant element that matches the given selector to exist.
+     * @param selector CSS selector to match.
+     * @param timeout Maximum time to wait for the element to exist, in milliseconds.
+     */
+    waitChild: (selector: string, timeout?: number) => Promise<Element>;
   }
 
   interface Element {
@@ -133,6 +140,13 @@ declare global {
       keySelector: (element: T) => K,
       valueSelector?: (element: T) => V
     ) => Map<K, V>;
+
+    /**
+     * Waits for the first descendant element that matches the given selector to exist.
+     * @param selector CSS selector to match.
+     * @param timeout Maximum time to wait for the element to exist, in milliseconds.
+     */
+    waitChild: (selector: string, timeout?: number) => Promise<Element>;
   }
 
   interface URLSearchParams {
@@ -232,6 +246,59 @@ Document.prototype.queryAsMap = function <T extends Element, K, V = T>(
   return map;
 };
 
+Document.prototype.waitChild = function (selector: string, timeoutMillis = 300_000) {
+  const el = this.querySelector(selector);
+  if (el) return Promise.resolve(el);
+
+  return new Promise<Element>((resolve, reject) => {
+    let timeout: number | null = null;
+    let interval: number | null = null;
+
+    const observer = new MutationObserver((mutations) => {
+      const element = this.querySelector(selector);
+      if (element) {
+        onElementFound(element);
+        return;
+      }
+
+      for (const mutation of mutations) {
+        if (mutation.type !== 'childList') continue;
+        for (const node of Array.from(mutation.addedNodes)) {
+          if (node instanceof Element && node.matches(`:has(${selector})`)) {
+            onElementFound(node);
+            return;
+          }
+        }
+      }
+    });
+
+    function onElementFound(element: Element) {
+      if (typeof timeout === 'number') clearTimeout(timeout);
+      if (typeof interval === 'number') clearInterval(interval);
+      observer.disconnect();
+      resolve(element);
+    }
+
+    function onInterval(this: Document) {
+      const element = this.querySelector(selector);
+      if (element) {
+        onElementFound(element);
+      }
+    }
+
+    function onTimeout() {
+      if (typeof interval === 'number') clearInterval(interval);
+      observer.disconnect();
+      reject(new Error(`timeout waiting for element: ${selector}`));
+    }
+
+    interval = setInterval(onInterval.bind(this), 100);
+    timeout = setTimeout(onTimeout, timeoutMillis);
+
+    observer.observe(this, { childList: true, subtree: true });
+  });
+};
+
 Element.prototype.getAttributeStrict = function <T extends string>(attribute: string): T {
   const value = this.getAttribute(attribute)?.trim();
   if (typeof value !== 'string' || value.length === 0) {
@@ -327,6 +394,59 @@ Element.prototype.queryAsMap = function <T extends Element, K, V = T>(
   }
 
   return map;
+};
+
+Element.prototype.waitChild = function (selector: string, timeoutMillis = 300_000) {
+  const el = this.querySelector(selector);
+  if (el) return Promise.resolve(el);
+
+  return new Promise<Element>((resolve, reject) => {
+    let timeout: number | null = null;
+    let interval: number | null = null;
+
+    const observer = new MutationObserver((mutations) => {
+      const element = this.querySelector(selector);
+      if (element) {
+        onElementFound(element);
+        return;
+      }
+
+      for (const mutation of mutations) {
+        if (mutation.type !== 'childList') continue;
+        for (const node of Array.from(mutation.addedNodes)) {
+          if (node instanceof Element && node.matches(`:has(${selector})`)) {
+            onElementFound(node);
+            return;
+          }
+        }
+      }
+    });
+
+    function onElementFound(element: Element) {
+      if (typeof timeout === 'number') clearTimeout(timeout);
+      if (typeof interval === 'number') clearInterval(interval);
+      observer.disconnect();
+      resolve(element);
+    }
+
+    function onInterval(this: Element) {
+      const element = this.querySelector(selector);
+      if (element) {
+        onElementFound(element);
+      }
+    }
+
+    function onTimeout() {
+      if (typeof interval === 'number') clearInterval(interval);
+      observer.disconnect();
+      reject(new Error(`timeout waiting for element: ${selector}`));
+    }
+
+    interval = setInterval(onInterval.bind(this), 100);
+    timeout = setTimeout(onTimeout, timeoutMillis);
+
+    observer.observe(this, { childList: true, subtree: true });
+  });
 };
 
 URLSearchParams.prototype.getStrict = function <T extends string>(name: string): T {
