@@ -87,13 +87,13 @@ declare global {
     ) => number;
 
     /** Returns the text content of the element, throwing an error if it has no text content. */
-    getTextContentStrict: <T extends string>() => T;
+    getTextStrict: <T extends string>() => T;
 
     /** Tries to parse the text content of the element as an integer. If the parsing fails, an error is thrown. */
-    parseIntStrict: (radix?: number, allowNegative?: boolean) => number;
+    getTextAsIntStrict: (radix?: number, allowNegative?: boolean) => number;
 
     /** Tries to parse the text content of the element as a floating point number. If the parsing fails, an error is thrown. */
-    parseFloatStrict: (allowNegative?: boolean) => number;
+    getTextAsFloatStrict: (allowNegative?: boolean) => number;
 
     /**
      * Query all element descendants of node that match selectors, then create an array from the result.
@@ -259,7 +259,7 @@ Element.prototype.getAttributeAsIntStrict = function (attribute: string, radix =
   return parsed;
 };
 
-Element.prototype.getTextContentStrict = function <T extends string>(): T {
+Element.prototype.getTextStrict = function <T extends string>(): T {
   const content = this.textContent?.trim();
   if (typeof content !== 'string' || content.length === 0) {
     throw new Error('element has no text content');
@@ -268,8 +268,8 @@ Element.prototype.getTextContentStrict = function <T extends string>(): T {
   return content as T;
 };
 
-Element.prototype.parseIntStrict = function (radix = 10): number {
-  const content = this.getTextContentStrict();
+Element.prototype.getTextAsIntStrict = function (radix = 10): number {
+  const content = this.getTextStrict();
   const parsed = Number.parseInt(content.replace(/\D/g, ''), radix);
   if (!Number.isInteger(parsed)) {
     throw new TypeError('could not parse text content as integer');
@@ -278,8 +278,8 @@ Element.prototype.parseIntStrict = function (radix = 10): number {
   return parsed;
 };
 
-Element.prototype.parseFloatStrict = function (): number {
-  const content = this.getTextContentStrict();
+Element.prototype.getTextAsFloatStrict = function (): number {
+  const content = this.getTextStrict();
   const parsed = Number.parseFloat(content);
   if (!Number.isFinite(parsed)) {
     throw new TypeError('could not parse text content as float');
