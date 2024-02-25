@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "5.2.2",
+  "version": "5.2.3",
   "description": "Adds prototype methods to DOM objects",
   "packageManager": "pnpm@8.15.4",
   "license": "MIT",
@@ -13,7 +13,7 @@
   "homepage": "https://tb.dev.br/prototype-dom",
   "repository": {
     "type": "git",
-    "url": "https://github.com/ferreira-tb/prototype-dom.git"
+    "url": "git+https://github.com/ferreira-tb/prototype-dom.git"
   },
   "bugs": {
     "url": "https://github.com/ferreira-tb/prototype-dom/issues",
