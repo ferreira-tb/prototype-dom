@@ -123,53 +123,31 @@ function waitChild<E extends Document | Element>() {
     selector: string,
     timeoutMillis = 300_000
   ): Promise<T> {
-    const el = this.querySelector<T>(selector);
-    if (el) return Promise.resolve(el);
+    let element = this.querySelector<T>(selector);
+    if (element) return Promise.resolve(element);
 
     return new Promise<T>((resolve, reject) => {
       let timeout: number | null = null;
       let interval: number | null = null;
 
-      const observer = new MutationObserver((mutations) => {
-        const element = this.querySelector<T>(selector);
-        if (element) {
-          onElementFound(element);
-          return;
-        }
-
-        for (const mutation of mutations) {
-          if (mutation.type !== 'childList') continue;
-          for (const node of Array.from(mutation.addedNodes)) {
-            if (node instanceof Element && node.matches(`:has(${selector})`)) {
-              onElementFound(node as T);
-              return;
-            }
-          }
-        }
-      });
-
-      function onElementFound(element: T) {
+      function onElementFound(el: T) {
         if (typeof timeout === 'number') clearTimeout(timeout);
         if (typeof interval === 'number') clearInterval(interval);
-        observer.disconnect();
-        resolve(element);
+        resolve(el);
       }
 
       function onInterval(this: E) {
-        const element = this.querySelector<T>(selector);
+        element = this.querySelector<T>(selector);
         if (element) onElementFound(element);
       }
 
       function onTimeout() {
         if (typeof interval === 'number') clearInterval(interval);
-        observer.disconnect();
         reject(new Error(`timeout waiting for element: ${selector}`));
       }
 
-      interval = setInterval(onInterval.bind(this), 100);
+      interval = setInterval(onInterval.bind(this), 50);
       timeout = setTimeout(onTimeout, timeoutMillis);
-
-      observer.observe(this, { childList: true, subtree: true });
     });
   };
 }
