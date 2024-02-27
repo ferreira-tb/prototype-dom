@@ -127,27 +127,22 @@ function waitChild<E extends Document | Element>() {
     if (element) return Promise.resolve(element);
 
     return new Promise<T>((resolve, reject) => {
-      let timeout: number | null = null;
-      let interval: number | null = null;
-
-      function onElementFound(el: T) {
-        if (typeof timeout === 'number') clearTimeout(timeout);
-        if (typeof interval === 'number') clearInterval(interval);
-        resolve(el);
-      }
+      const timeout = setTimeout(onTimeout, timeoutMillis);
+      const interval = setInterval(onInterval.bind(this), 50);
 
       function onInterval(this: E) {
         element = this.querySelector<T>(selector);
-        if (element) onElementFound(element);
+        if (element) {
+          clearInterval(interval);
+          clearTimeout(timeout);
+          resolve(element);
+        }
       }
 
       function onTimeout() {
-        if (typeof interval === 'number') clearInterval(interval);
+        clearInterval(interval);
         reject(new Error(`timeout waiting for element: ${selector}`));
       }
-
-      interval = setInterval(onInterval.bind(this), 50);
-      timeout = setTimeout(onTimeout, timeoutMillis);
     });
   };
 }
