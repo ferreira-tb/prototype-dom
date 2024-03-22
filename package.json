@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "6.1.6",
+  "version": "6.1.7",
   "description": "Adds prototype methods to DOM objects",
   "packageManager": "pnpm@8.15.4",
   "license": "MIT",

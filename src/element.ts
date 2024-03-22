@@ -121,29 +121,31 @@ function waitChild<E extends Document | Element>() {
   return function <T extends Element = Element>(
     this: E,
     selector: string,
-    timeoutMillis = 300_000
+    timeoutMillis = 60_000
   ): Promise<T> {
     let element = this.querySelector<T>(selector);
     if (element) return Promise.resolve(element);
 
-    return new Promise<T>((resolve, reject) => {
-      const timeout = setTimeout(onTimeout, timeoutMillis);
-      const interval = setInterval(onInterval.bind(this), 50);
+    const { promise, resolve, reject } = Promise.withResolvers<T>();
 
-      function onInterval(this: E) {
-        element = this.querySelector<T>(selector);
-        if (element) {
-          clearInterval(interval);
-          clearTimeout(timeout);
-          resolve(element);
-        }
-      }
+    const timeout = setTimeout(onTimeout, timeoutMillis);
+    const interval = setInterval(onInterval.bind(this), 20);
 
-      function onTimeout() {
+    function onInterval(this: E) {
+      element = this.querySelector<T>(selector);
+      if (element) {
         clearInterval(interval);
-        reject(new Error(`timeout waiting for element: ${selector}`));
+        clearTimeout(timeout);
+        resolve(element);
       }
-    });
+    }
+
+    function onTimeout() {
+      clearInterval(interval);
+      reject(new Error(`timeout waiting for element: ${selector}`));
+    }
+
+    return promise;
   };
 }
 
