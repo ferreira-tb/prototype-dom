@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "6.1.10",
+  "version": "6.1.11",
   "description": "Adds prototype methods to DOM objects",
   "packageManager": "pnpm@9.0.2",
   "license": "MIT",
@@ -33,16 +33,16 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "@tb-dev/eslint-config": "^3.8.0",
+    "@tb-dev/eslint-config": "^3.8.3",
     "eslint": "^8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
     "prettier": "^3.3.2",
     "rollup": "^4.18.0",
     "tslib": "^2.6.3",
-    "typedoc": "^0.25.13",
+    "typedoc": "^0.26.0",
     "typedoc-plugin-mdn-links": "^3.1.30",
-    "typescript": "^5.4.5"
+    "typescript": "^5.5.2"
   },
   "files": [
     "dist/**/*"
