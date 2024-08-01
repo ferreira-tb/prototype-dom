@@ -33,7 +33,7 @@
   },
   "devDependencies": {
     "@rollup/plugin-typescript": "^11.1.6",
-    "@tb-dev/eslint-config": "^3.8.3",
+    "@tb-dev/eslint-config": "^4.4.2",
     "eslint": "^8.57.0",
     "husky": "^9.0.11",
     "lint-staged": "^15.2.7",
