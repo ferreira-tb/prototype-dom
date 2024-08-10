@@ -1,5 +1,10 @@
-import config from '@tb-dev/eslint-config';
+import { defineConfig } from '@tb-dev/eslint-config';
 
-export default config({
-  project: ['./tsconfig.json']
+export default defineConfig({
+  project: ['./tsconfig.json'],
+  overrides: {
+    typescript: {
+      '@typescript-eslint/naming-convention': 'off'
+    }
+  }
 });
