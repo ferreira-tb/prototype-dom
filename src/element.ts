@@ -121,7 +121,7 @@ function waitChild<E extends Document | Element>() {
   return function <T extends Element = Element>(
     this: E,
     selector: string,
-    timeoutMillis = 60_000
+    timeoutMillis = 5_000
   ): Promise<T> {
     let element = this.querySelector<T>(selector);
     if (element) return Promise.resolve(element);
