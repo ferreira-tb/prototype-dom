@@ -1,8 +1,8 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "6.1.12",
+  "version": "6.1.13",
   "description": "Adds prototype methods to DOM objects",
-  "packageManager": "pnpm@9.7.0",
+  "packageManager": "pnpm@9.7.1",
   "license": "MIT",
   "type": "module",
   "author": {
@@ -23,30 +23,32 @@
     "*.{?(c|m)@(j|t)s,css,vue,md,json}": "prettier --write"
   },
   "scripts": {
-    "build": "rollup --config rollup.config.js && node scripts/delete-artifacts.mjs",
+    "build": "vite build",
     "docs": "typedoc --plugin typedoc-plugin-mdn-links",
     "format": "prettier . --write",
-    "format-check": "prettier . --check",
+    "lint": "eslint . --config eslint.config.js --cache",
+    "lint-fix": "eslint . --config eslint.config.js --fix",
     "prepare": "husky",
     "release": "pnpm run build && pnpm publish",
-    "type-check": "tsc --noEmit"
+    "type-check": "tsc --noEmit",
+    "update": "miho update major -t"
   },
   "devDependencies": {
-    "@rollup/plugin-typescript": "^11.1.6",
-    "@tb-dev/eslint-config": "^5.0.4",
+    "@tb-dev/eslint-config": "^5.2.1",
     "eslint": "^9.9.0",
-    "husky": "^9.1.4",
-    "lint-staged": "^15.2.8",
+    "husky": "^9.1.5",
+    "lint-staged": "^15.2.9",
     "prettier": "^3.3.3",
-    "rollup": "^4.20.0",
     "tslib": "^2.6.3",
-    "typedoc": "^0.26.5",
-    "typedoc-plugin-mdn-links": "^3.2.7",
-    "typescript": "^5.5.4"
+    "typedoc": "^0.26.6",
+    "typedoc-plugin-mdn-links": "^3.2.9",
+    "typescript": "^5.5.4",
+    "vite": "^5.4.2",
+    "vite-plugin-dts": "^4.0.3"
   },
   "files": [
     "dist/**/*"
   ],
-  "main": "./dist/index.js",
+  "main": "./dist/index.iife.js",
   "types": "./dist/index.d.ts"
 }

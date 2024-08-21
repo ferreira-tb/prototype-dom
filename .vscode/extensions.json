@@ -1,8 +1,8 @@
 {
   "recommendations": [
     "vivaxy.vscode-conventional-commits",
+    "dbaeumer.vscode-eslint",
     "github.vscode-pull-request-github",
-    "esbenp.prettier-vscode",
-    "vscode-icons-team.vscode-icons"
+    "esbenp.prettier-vscode"
   ]
 }
