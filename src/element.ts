@@ -149,6 +149,23 @@ function waitChild<E extends Document | Element>() {
   };
 }
 
+function scrollAsync<E extends Document | Element>() {
+  return async function (
+    this: E,
+    selector: string,
+    options: { timeout?: number } & ScrollIntoViewOptions = {}
+  ) {
+    const { timeout, ...scrollOptions } = options;
+    const element = await this.waitChild(selector, timeout);
+    element.scrollIntoView({
+      behavior: 'smooth',
+      block: 'center',
+      inline: 'nearest',
+      ...scrollOptions
+    });
+  };
+}
+
 export const element = {
   getAttributeStrict,
   getAttributeAsFloatStrict,
@@ -160,5 +177,6 @@ export const element = {
   queryAsArray,
   queryAsSet,
   queryAsMap,
+  scrollAsync,
   waitChild
 };
