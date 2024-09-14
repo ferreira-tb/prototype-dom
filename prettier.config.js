@@ -5,8 +5,8 @@ export default {
   useTabs: false,
   semi: true,
   singleQuote: true,
-  trailingComma: 'none',
+  trailingComma: 'es5',
   bracketSpacing: true,
   bracketSameLine: false,
-  arrowParens: 'always'
+  arrowParens: 'always',
 };

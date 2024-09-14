@@ -34,5 +34,5 @@ function getAsIntegerStrict() {
 export const urlSearchParams = {
   getStrict,
   getAsInteger,
-  getAsIntegerStrict
+  getAsIntegerStrict,
 };

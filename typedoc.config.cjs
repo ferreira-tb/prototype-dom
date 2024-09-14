@@ -5,5 +5,5 @@ module.exports = {
   includeVersion: true,
   excludePrivate: true,
   excludeProtected: true,
-  githubPages: false
+  githubPages: false,
 };

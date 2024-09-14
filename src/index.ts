@@ -1,5 +1,8 @@
 import { element } from './element';
 import { urlSearchParams } from './url';
+import type { ScrollAsyncOptions } from './types';
+
+export type * from './types';
 
 declare global {
   interface Document {
@@ -51,10 +54,7 @@ declare global {
      * @param selector CSS selector to match.
      * @param options Options to customize the scrolling behavior.
      */
-    scrollAsync: (
-      selector: string,
-      options?: { timeout?: number } & ScrollIntoViewOptions
-    ) => Promise<void>;
+    scrollAsync: (selector: string, options?: ScrollAsyncOptions) => Promise<void>;
 
     /**
      * Wait for the first descendant element that matches the given selector to exist.
@@ -166,10 +166,7 @@ declare global {
      * @param selector CSS selector to match.
      * @param options Options to customize the scrolling behavior.
      */
-    scrollAsync: (
-      selector: string,
-      options?: { timeout?: number } & ScrollIntoViewOptions
-    ) => Promise<void>;
+    scrollAsync: (selector: string, options?: ScrollAsyncOptions) => Promise<void>;
 
     /**
      * Wait for the first descendant element that matches the given selector to exist.

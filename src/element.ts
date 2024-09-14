@@ -1,3 +1,5 @@
+import type { ScrollAsyncOptions } from './types';
+
 function getAttributeStrict<E extends Element>() {
   return function (this: E, attribute: string): string {
     const attr = this.getAttribute(attribute)?.trim();
@@ -150,19 +152,19 @@ function waitChild<E extends Document | Element>() {
 }
 
 function scrollAsync<E extends Document | Element>() {
-  return async function (
-    this: E,
-    selector: string,
-    options: { timeout?: number } & ScrollIntoViewOptions = {}
-  ) {
-    const { timeout, ...scrollOptions } = options;
-    const element = await this.waitChild(selector, timeout);
-    element.scrollIntoView({
-      behavior: 'smooth',
-      block: 'center',
-      inline: 'nearest',
-      ...scrollOptions
-    });
+  return async function (this: E, selector: string, options: ScrollAsyncOptions = {}) {
+    const { timeout, throwOnTimeout = true, ...scrollOptions } = options;
+    try {
+      const element = await this.waitChild(selector, timeout);
+      element.scrollIntoView({
+        behavior: 'smooth',
+        block: 'center',
+        inline: 'nearest',
+        ...scrollOptions,
+      });
+    } catch (err) {
+      if (throwOnTimeout) throw err;
+    }
   };
 }
 
@@ -178,5 +180,5 @@ export const element = {
   queryAsSet,
   queryAsMap,
   scrollAsync,
-  waitChild
+  waitChild,
 };

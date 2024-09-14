@@ -13,7 +13,7 @@ export default defineConfig({
       name: 'prototypeDom',
       entry: resolve(__dirname, 'src/index.ts'),
       formats: ['iife'],
-      fileName: 'index'
-    }
-  }
+      fileName: 'index',
+    },
+  },
 });
