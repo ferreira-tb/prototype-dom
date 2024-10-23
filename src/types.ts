@@ -1,4 +1,4 @@
-export interface ScrollAsyncOptions extends ScrollIntoViewOptions {
+export interface WaitScrollOptions extends ScrollIntoViewOptions {
   timeout?: number;
 
   /** @default true */

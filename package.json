@@ -1,8 +1,8 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "6.3.1",
+  "version": "7.0.0",
   "description": "Prototype methods for DOM objects",
-  "packageManager": "pnpm@9.12.0",
+  "packageManager": "pnpm@9.12.2",
   "license": "MIT",
   "type": "module",
   "author": {
@@ -19,32 +19,26 @@
     "url": "https://github.com/ferreira-tb/prototype-dom/issues",
     "email": "andrew.shien2@gmail.com"
   },
-  "lint-staged": {
-    "*.{?(c|m)@(j|t)s,css,vue,md,json}": "prettier --write"
-  },
   "scripts": {
     "build": "vite build",
     "docs": "typedoc --plugin typedoc-plugin-mdn-links",
     "format": "prettier . --write",
     "lint": "eslint . --config eslint.config.js --cache",
     "lint-fix": "eslint . --config eslint.config.js --fix",
-    "prepare": "husky",
     "release": "pnpm run build && pnpm publish",
     "type-check": "tsc --noEmit",
     "update": "miho update major -t"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^5.3.3",
-    "eslint": "^9.11.1",
-    "husky": "^9.1.6",
-    "lint-staged": "^15.2.10",
+    "@tb-dev/eslint-config": "^5.4.9",
+    "eslint": "^9.13.0",
     "prettier": "^3.3.3",
-    "tslib": "^2.7.0",
-    "typedoc": "^0.26.7",
-    "typedoc-plugin-mdn-links": "^3.3.2",
-    "typescript": "^5.6.2",
-    "vite": "^5.4.8",
-    "vite-plugin-dts": "^4.2.3"
+    "tslib": "^2.8.0",
+    "typedoc": "^0.26.10",
+    "typedoc-plugin-mdn-links": "^3.3.4",
+    "typescript": "^5.6.3",
+    "vite": "^5.4.10",
+    "vite-plugin-dts": "^4.3.0"
   },
   "files": [
     "dist/**/*"

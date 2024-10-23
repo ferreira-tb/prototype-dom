@@ -1,6 +1,6 @@
 import { element } from './element';
 import { urlSearchParams } from './url';
-import type { ScrollAsyncOptions } from './types';
+import type { WaitScrollOptions } from './types';
 
 export type * from './types';
 
@@ -50,18 +50,18 @@ declare global {
 
     /**
      * Wait for the first descendant element that matches the given selector to exist.
-     * Once found, scroll the element into view.
-     * @param selector CSS selector to match.
-     * @param options Options to customize the scrolling behavior.
-     */
-    scrollAsync: (selector: string, options?: ScrollAsyncOptions) => Promise<void>;
-
-    /**
-     * Wait for the first descendant element that matches the given selector to exist.
      * @param selector CSS selector to match.
      * @param timeout Maximum time to wait for the element, in milliseconds.
      */
     waitChild: (selector: string, timeout?: number) => Promise<Element>;
+
+    /**
+     * Wait for the first descendant element that matches the given selector to exist.
+     * Once found, scroll the element into view.
+     * @param selector CSS selector to match.
+     * @param options Options to customize the scrolling behavior.
+     */
+    waitScroll: (selector: string, options?: WaitScrollOptions) => Promise<void>;
   }
 
   interface Element {
@@ -162,18 +162,18 @@ declare global {
 
     /**
      * Wait for the first descendant element that matches the given selector to exist.
-     * Once found, scroll the element into view.
-     * @param selector CSS selector to match.
-     * @param options Options to customize the scrolling behavior.
-     */
-    scrollAsync: (selector: string, options?: ScrollAsyncOptions) => Promise<void>;
-
-    /**
-     * Wait for the first descendant element that matches the given selector to exist.
      * @param selector CSS selector to match.
      * @param timeout Maximum time to wait for the element, in milliseconds.
      */
     waitChild: (selector: string, timeout?: number) => Promise<Element>;
+
+    /**
+     * Wait for the first descendant element that matches the given selector to exist.
+     * Once found, scroll the element into view.
+     * @param selector CSS selector to match.
+     * @param options Options to customize the scrolling behavior.
+     */
+    waitScroll: (selector: string, options?: WaitScrollOptions) => Promise<void>;
   }
 
   interface URLSearchParams {
@@ -210,7 +210,7 @@ Document.prototype.queryStrict = element.queryStrict<Document>();
 Document.prototype.queryAsArray = element.queryAsArray<Document>();
 Document.prototype.queryAsSet = element.queryAsSet<Document>();
 Document.prototype.queryAsMap = element.queryAsMap<Document>();
-Document.prototype.scrollAsync = element.scrollAsync<Document>();
+Document.prototype.waitScroll = element.waitScroll<Document>();
 Document.prototype.waitChild = element.waitChild<Document>();
 
 Element.prototype.getAttributeStrict = element.getAttributeStrict<Element>();
@@ -223,7 +223,7 @@ Element.prototype.queryStrict = element.queryStrict<Element>();
 Element.prototype.queryAsArray = element.queryAsArray<Element>();
 Element.prototype.queryAsSet = element.queryAsSet<Element>();
 Element.prototype.queryAsMap = element.queryAsMap<Element>();
-Element.prototype.scrollAsync = element.scrollAsync<Element>();
+Element.prototype.waitScroll = element.waitScroll<Element>();
 Element.prototype.waitChild = element.waitChild<Element>();
 
 URLSearchParams.prototype.getStrict = urlSearchParams.getStrict();
