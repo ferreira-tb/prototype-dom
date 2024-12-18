@@ -229,3 +229,5 @@ Element.prototype.waitChild = element.waitChild<Element>();
 URLSearchParams.prototype.getStrict = urlSearchParams.getStrict();
 URLSearchParams.prototype.getAsInteger = urlSearchParams.getAsInteger();
 URLSearchParams.prototype.getAsIntegerStrict = urlSearchParams.getAsIntegerStrict();
+
+export type { element, urlSearchParams };
