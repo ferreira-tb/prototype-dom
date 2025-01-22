@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "7.0.3",
+  "version": "7.0.4",
   "description": "Helpful prototype methods",
   "packageManager": "pnpm@9.15.0",
   "license": "MIT",
