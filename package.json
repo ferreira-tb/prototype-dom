@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "7.0.9",
+  "version": "7.0.10",
   "description": "Helpful prototype methods",
   "packageManager": "pnpm@10.7.0",
   "license": "MIT",
@@ -10,6 +10,7 @@
     "email": "andrew.shien2@gmail.com",
     "url": "https://github.com/ferreira-tb"
   },
+  "funding": "https://github.com/sponsors/ferreira-tb",
   "homepage": "https://tb.dev.br/prototype-dom",
   "repository": {
     "type": "git",
