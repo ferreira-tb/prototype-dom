@@ -11,7 +11,7 @@ export default defineConfig({
     minify: false,
     lib: {
       name: 'prototypeDom',
-      entry: resolve(__dirname, 'src/index.ts'),
+      entry: resolve(import.meta.dirname, 'src/index.ts'),
       formats: ['iife'],
       fileName: 'index',
     },
