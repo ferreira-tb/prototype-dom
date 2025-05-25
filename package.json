@@ -1,8 +1,8 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "7.0.13",
+  "version": "7.0.14",
   "description": "Helpful prototype methods",
-  "packageManager": "pnpm@10.10.0",
+  "packageManager": "pnpm@10.11.0",
   "license": "MIT",
   "type": "module",
   "author": {
@@ -31,15 +31,15 @@
     "update": "miho update major -t"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^7.1.3",
-    "eslint": "^9.26.0",
+    "@tb-dev/eslint-config": "^7.1.4",
+    "eslint": "^9.27.0",
     "prettier": "^3.5.3",
     "tslib": "^2.8.1",
     "typedoc": "^0.28.4",
-    "typedoc-plugin-mdn-links": "^5.0.1",
+    "typedoc-plugin-mdn-links": "^5.0.2",
     "typescript": "^5.8.3",
     "vite": "^6.3.5",
-    "vite-plugin-dts": "^4.5.3"
+    "vite-plugin-dts": "^4.5.4"
   },
   "files": [
     "dist/**/*"
