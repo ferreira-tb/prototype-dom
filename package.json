@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "7.0.15",
+  "version": "7.0.16",
   "description": "Helpful prototype methods",
   "packageManager": "pnpm@10.12.1",
   "license": "MIT",
@@ -31,8 +31,8 @@
     "update": "miho update major -t"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^7.1.7",
-    "eslint": "^9.28.0",
+    "@tb-dev/eslint-config": "^7.1.8",
+    "eslint": "^9.29.0",
     "prettier": "^3.5.3",
     "tslib": "^2.8.1",
     "typedoc": "^0.28.5",
