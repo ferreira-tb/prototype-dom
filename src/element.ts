@@ -1,7 +1,7 @@
 import type { WaitScrollOptions } from './types';
 
 function getAttributeStrict<E extends Element>() {
-  return function (this: E, attribute: string): string {
+  return function(this: E, attribute: string): string {
     const attr = this.getAttribute(attribute)?.trim();
     if (typeof attr !== 'string' || attr.length === 0) {
       throw new Error(`attribute "${attribute}" not found`);
@@ -12,7 +12,7 @@ function getAttributeStrict<E extends Element>() {
 }
 
 function getAttributeAsFloatStrict<E extends Element>() {
-  return function (this: E, attribute: string): number {
+  return function(this: E, attribute: string): number {
     const attr = this.getAttributeStrict(attribute);
     const value = Number.parseFloat(attr.trim());
 
@@ -25,7 +25,7 @@ function getAttributeAsFloatStrict<E extends Element>() {
 }
 
 function getAttributeAsIntStrict<E extends Element>() {
-  return function (this: E, attribute: string, radix = 10): number {
+  return function(this: E, attribute: string, radix = 10): number {
     const attr = this.getAttributeStrict(attribute);
     const value = Number.parseInt(attr.trim(), radix);
 
@@ -38,7 +38,8 @@ function getAttributeAsIntStrict<E extends Element>() {
 }
 
 function getTextStrict<E extends Element>() {
-  return function (this: E): string {
+  return function(this: E): string {
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const text = this.textContent?.trim();
     if (typeof text !== 'string' || text.length === 0) {
       throw new Error('element has no text content');
@@ -49,7 +50,7 @@ function getTextStrict<E extends Element>() {
 }
 
 function getTextAsIntStrict<E extends Element>() {
-  return function (this: E, radix = 10): number {
+  return function(this: E, radix = 10): number {
     const value = Number.parseInt(this.getTextStrict(), radix);
     if (!Number.isInteger(value)) {
       throw new TypeError('could not parse text content as integer');
@@ -60,7 +61,7 @@ function getTextAsIntStrict<E extends Element>() {
 }
 
 function getTextAsFloatStrict<E extends Element>() {
-  return function (this: E): number {
+  return function(this: E): number {
     const value = Number.parseFloat(this.getTextStrict());
     if (!Number.isFinite(value)) {
       throw new TypeError('could not parse text content as float');
@@ -71,7 +72,7 @@ function getTextAsFloatStrict<E extends Element>() {
 }
 
 function queryStrict<E extends Document | Element>() {
-  return function <T extends Element = Element>(this: E, selector: string): T {
+  return function<T extends Element = Element>(this: E, selector: string): T {
     const element = this.querySelector<T>(selector);
     if (!element) throw new Error(`no element found for selector "${selector}"`);
     return element;
@@ -79,7 +80,7 @@ function queryStrict<E extends Document | Element>() {
 }
 
 function queryAsArray<E extends Document | Element>() {
-  return function <T = Element>(this: E, selector: string, valueFn?: (element: Element) => T): T[] {
+  return function<T = Element>(this: E, selector: string, valueFn?: (element: Element) => T): T[] {
     valueFn ??= (element) => element as T;
     const elements = this.querySelectorAll(selector);
     return Array.from(elements, valueFn);
@@ -87,10 +88,10 @@ function queryAsArray<E extends Document | Element>() {
 }
 
 function queryAsSet<E extends Document | Element>() {
-  return function <T = Element>(
+  return function<T = Element>(
     this: E,
     selector: string,
-    valueFn?: (element: Element) => T
+    valueFn?: (element: Element) => T,
   ): Set<T> {
     valueFn ??= (element: Element) => element as T;
     const elements = this.queryAsArray<T>(selector, valueFn);
@@ -99,11 +100,11 @@ function queryAsSet<E extends Document | Element>() {
 }
 
 function queryAsMap<E extends Document | Element>() {
-  return function <T extends Element, K, V = T>(
+  return function<T extends Element, K, V = T>(
     this: E,
     selector: string,
     keyFn: (element: T) => K,
-    valueFn?: (element: T) => V
+    valueFn?: (element: T) => V,
   ): Map<K, V> {
     valueFn ??= (element: T) => element as unknown as V;
     const elements = this.queryAsArray<T>(selector);
@@ -120,10 +121,10 @@ function queryAsMap<E extends Document | Element>() {
 }
 
 function waitChild<E extends Document | Element>() {
-  return function <T extends Element = Element>(
+  return function<T extends Element = Element>(
     this: E,
     selector: string,
-    timeoutMillis = 5_000
+    timeoutMillis = 5_000,
   ): Promise<T> {
     let element = this.querySelector<T>(selector);
     if (element) return Promise.resolve(element);
@@ -152,7 +153,7 @@ function waitChild<E extends Document | Element>() {
 }
 
 function waitScroll<E extends Document | Element>() {
-  return async function (this: E, selector: string, options: WaitScrollOptions = {}) {
+  return async function(this: E, selector: string, options: WaitScrollOptions = {}) {
     const { timeout, throwOnTimeout = true, ...scrollOptions } = options;
     try {
       const element = await this.waitChild(selector, timeout);
@@ -162,7 +163,8 @@ function waitScroll<E extends Document | Element>() {
         inline: 'nearest',
         ...scrollOptions,
       });
-    } catch (err) {
+    }
+    catch (err) {
       if (throwOnTimeout) throw err;
     }
   };

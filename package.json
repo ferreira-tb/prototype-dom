@@ -1,6 +1,6 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "7.0.22",
+  "version": "7.0.23",
   "description": "Helpful prototype methods",
   "packageManager": "pnpm@10.14.0",
   "license": "MIT",
@@ -23,7 +23,7 @@
   "scripts": {
     "build": "vite build",
     "docs": "typedoc --plugin typedoc-plugin-mdn-links",
-    "format": "prettier . --write",
+    "format": "dprint fmt",
     "lint": "eslint . --config eslint.config.js --cache",
     "lint-fix": "eslint . --config eslint.config.js --fix",
     "release": "pnpm run build && pnpm publish",
@@ -33,7 +33,6 @@
   "devDependencies": {
     "@tb-dev/eslint-config": "^8.0.5",
     "eslint": "^9.33.0",
-    "prettier": "^3.6.2",
     "tslib": "^2.8.1",
     "typedoc": "^0.28.10",
     "typedoc-plugin-mdn-links": "^5.0.8",

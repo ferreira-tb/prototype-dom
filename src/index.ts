@@ -45,7 +45,7 @@ declare global {
     queryAsMap: <T extends Element, K, V = T>(
       selector: string,
       keyFn: (element: T) => K,
-      valueFn?: (element: T) => V
+      valueFn?: (element: T) => V,
     ) => Map<K, V>;
 
     /**
@@ -157,7 +157,7 @@ declare global {
     queryAsMap: <T extends Element, K, V = T>(
       selector: string,
       keyFn: (element: T) => K,
-      valueFn?: (element: T) => V
+      valueFn?: (element: T) => V,
     ) => Map<K, V>;
 
     /**
