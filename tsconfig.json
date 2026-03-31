@@ -1,8 +1,6 @@
 {
   "include": ["src/**/*"],
   "compilerOptions": {
-    "baseUrl": ".",
-    "target": "esnext",
     "lib": ["esnext", "dom"],
     "module": "esnext",
     "moduleResolution": "bundler",
@@ -30,6 +28,8 @@
     "exactOptionalPropertyTypes": true,
     "noFallthroughCasesInSwitch": true,
     "forceConsistentCasingInFileNames": true,
-    "noEmitOnError": true
+    "noEmitOnError": true,
+
+    "types": ["node"]
   }
 }
