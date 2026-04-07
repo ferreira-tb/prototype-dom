@@ -4,9 +4,9 @@ export default defineConfig({
   project: ['./tsconfig.json'],
   overrides: {
     typescript: {
-      '@typescript-eslint/naming-convention': 'off',
-      '@typescript-eslint/no-unnecessary-type-parameters': 'off',
-      '@typescript-eslint/only-throw-error': 'off',
+      'naming-convention': 'off',
+      'no-unnecessary-type-parameters': 'off',
+      'only-throw-error': 'off',
     },
   },
 });
