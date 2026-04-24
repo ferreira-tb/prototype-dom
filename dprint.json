@@ -17,6 +17,10 @@
     "importDeclaration.sortNamedImports": "maintain",
     "importDeclaration.sortTypeOnlyImports": "none"
   },
+  "json": {
+    "array.preferSingleLine": true,
+    "object.preferSingleLine": false
+  },
   "excludes": ["**/dist", "**/LICENSE", "**/*-lock.yaml", "**/*.xml"],
   "plugins": [
     "https://plugins.dprint.dev/typescript-0.95.15.wasm",

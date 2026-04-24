@@ -1,8 +1,8 @@
 {
   "name": "@tb-dev/prototype-dom",
-  "version": "7.0.42",
+  "version": "7.0.43",
   "description": "Helpful prototype methods",
-  "packageManager": "pnpm@10.33.0",
+  "packageManager": "pnpm@10.33.2",
   "license": "MIT",
   "type": "module",
   "author": {
@@ -30,19 +30,17 @@
     "type-check": "tsc --noEmit"
   },
   "devDependencies": {
-    "@tb-dev/eslint-config": "^10.0.5",
-    "@types/node": "^25.5.2",
-    "eslint": "^10.2.0",
+    "@tb-dev/eslint-config": "^10.0.8",
+    "@types/node": "^25.6.0",
+    "eslint": "^10.2.1",
     "tslib": "^2.8.1",
-    "typedoc": "^0.28.18",
+    "typedoc": "^0.28.19",
     "typedoc-plugin-mdn-links": "^5.1.1",
-    "typescript": "^6.0.2",
-    "vite": "^8.0.6",
+    "typescript": "^6.0.3",
+    "vite": "^8.0.10",
     "vite-plugin-dts": "^4.5.4"
   },
-  "files": [
-    "dist"
-  ],
+  "files": ["dist"],
   "main": "./dist/index.iife.js",
   "types": "./dist/src/index.d.ts"
 }
